@@ -1,4 +1,4 @@
-# ![joomla](joomla.png)Ansible LEMP Stack с Joomla CMS
+# <img src="joomla.png" alt="joomla" width=140/>Ansible LEMP Stack с Joomla CMS
 
 Этот Ansible проект автоматизирует развертывание LEMP-стека (Linux, Nginx, MySQL, PHP) с CMS Joomla на серверах Ubuntu.
 
