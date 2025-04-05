@@ -1,12 +1,6 @@
 ---
-- name: Run MySQL secure installation
-  community.mysql.mysql_query:
-    login_user: root
-    login_password: ""
-    query: "{{ lookup('file', '/tmp/mysql_secure_installation.sql') }}"
-  when: sql_script is defined and sql_script.changed
-
-- name: Clean up temporary SQL file
-  ansible.builtin.file:
-    path: /tmp/mysql_secure_installation.sql
-    state: absent
+- name: Restart mysql
+  ansible.builtin.service:
+    name: mysql
+    state: restarted
+    enabled: true

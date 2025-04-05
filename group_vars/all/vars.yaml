@@ -14,6 +14,5 @@ mysql_user_password: "{{ vault_mysql_user_password }}"
 mysql_user_privileges: "*.*:ALL"
 
 # Joomla
-joomla_version: "5.1.4"
-joomla_download_url: "https://downloads.joomla.org/cms/joomla5/{{ joomla_version }}/Joomla_{{ joomla_version }}-Stable-Full_Package.tar.gz"
-joomla_install_dir: "{{ nginx_web_root }}"
+joomla_version: "5-1-4"
+joomla_download_url: "https://downloads.joomla.org/cms/joomla5/{{ joomla_version }}/Joomla_{{ joomla_version }}-Stable-Full_Package.zip"

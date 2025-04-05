@@ -1,3 +1,0 @@
----
-joomla_version: "5.1.4"
-joomla_download_url: "https://downloads.joomla.org/cms/joomla5/{{ joomla_version }}/Joomla_{{ joomla_version }}-Stable-Full_Package.tar.gz"

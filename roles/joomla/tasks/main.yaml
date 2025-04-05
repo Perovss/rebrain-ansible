@@ -1,4 +1,9 @@
 ---
+- name: Install Unzip
+  ansible.builtin.apt:
+    name: unzip
+    state: present
+    
 - name: Download Joomla
   ansible.builtin.get_url:
     url: "{{ joomla_download_url }}"

@@ -1,98 +1,35 @@
 ---
-- name: Install MySQL Python dependencies
-  apt:
-    name: "{{ item }}"
+- name: Set MySQL root password via debconf
+  # noqa no-changed-when
+  # noqa risky-shell-pipe
+  ansible.builtin.shell:
+    cmd: |
+      echo "mysql-server mysql-server/root_password password {{ mysql_root_password }}" | debconf-set-selections
+      echo "mysql-server mysql-server/root_password_again password {{ mysql_root_password }}" | debconf-set-selections
+    executable: /bin/bash
+  become: true
+  no_log: true
+
+- name: Install MySQL Python module
+  # noqa package-latest
+  ansible.builtin.apt:
+    name: python3-mysqldb
     state: present
-  loop:
-    - python3-pymysql
-    - python3-mysql.connector
 
 - name: Install MySQL Server
-  apt:
+  # noqa package-latest
+  ansible.builtin.apt:
     name: mysql-server
-    state: present
-    update_cache: true
+    state: latest
+  notify: Restart mysql
 
-- name: Ensure MySQL is running and enabled
-  service:
+- name: Ensure MySQL is started and enabled
+  ansible.builtin.service:
     name: mysql
     state: started
     enabled: true
 
-- name: Check if root password is already set
-  community.mysql.mysql_query:
-    login_user: root
-    login_password: ""
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    query: "SELECT 1"
-  register: root_access_check
-  ignore_errors: yes
-  changed_when: false
-
-- name: Set root password (when no password set)
-  community.mysql.mysql_user:
-    login_user: root
-    login_unix_socket: /var/run/mysqld/mysqld.sock
-    name: root
-    password: "{{ mysql_root_password }}"
-    host: localhost
-    priv: "*.*:ALL,GRANT"
-    state: present
-  when: root_access_check is failed
-
-- name: Set root password (when password already set)
-  community.mysql.mysql_user:
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-    name: root
-    password: "{{ mysql_root_password }}"
-    host: localhost
-    priv: "*.*:ALL,GRANT"
-    state: present
-    update_password: always
-  when: root_access_check is succeeded
-
-- name: Secure MySQL installation
-  block:
-    - name: Remove anonymous users
-      community.mysql.mysql_query:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        query: "DELETE FROM mysql.user WHERE User='';"
-
-    - name: Secure root accounts
-      community.mysql.mysql_query:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        query: "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
-
-    - name: Remove test database
-      community.mysql.mysql_query:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        query: "DROP DATABASE IF EXISTS test;"
-
-    - name: Remove test database privileges
-      community.mysql.mysql_query:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        query: "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
-
-    - name: Flush privileges
-      community.mysql.mysql_query:
-        login_user: root
-        login_password: "{{ mysql_root_password }}"
-        query: "FLUSH PRIVILEGES;"
-  when: mysql_root_password is defined
-
-- name: Create MySQL database for Joomla
-  community.mysql.mysql_db:
-    name: joomla
-    state: present
-    login_user: root
-    login_password: "{{ mysql_root_password }}"
-
-- name: Create MySQL user for Joomla
+- name: Create MySQL User
   community.mysql.mysql_user:
     name: "{{ mysql_user }}"
     password: "{{ mysql_user_password }}"
@@ -100,3 +37,12 @@
     state: present
     login_user: root
     login_password: "{{ mysql_root_password }}"
+
+- name: Test MySQL connection
+  community.mysql.mysql_query:
+    login_user: "{{ mysql_user }}"
+    login_password: "{{ mysql_user_password }}"
+    query: "SHOW DATABASES"
+  register: test_db
+  failed_when: "test_db.failed"
+  changed_when: false
