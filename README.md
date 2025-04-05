@@ -14,8 +14,8 @@
 1. Клонируйте репозиторий:
 
    ```
-   git clone https://github.com/ваш-репозиторий/lemp-joomla.git
-   cd lemp-joomla
+   git clone https://github.com/Perovss/rebrain-ansible.git
+   cd rebrain-ansible
    ```
 
 2. Настройте инвентарь:
