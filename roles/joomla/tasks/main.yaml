@@ -3,19 +3,18 @@
   ansible.builtin.apt:
     name: unzip
     state: present
-    
+
 - name: Download Joomla
   ansible.builtin.get_url:
     url: "{{ joomla_download_url }}"
-    dest: /tmp/joomla.tar.gz
+    dest: /tmp/joomla.zip
     mode: '0644'
 
 - name: Extract Joomla to web directory
   ansible.builtin.unarchive:
-    src: /tmp/joomla.tar.gz
+    src: /tmp/joomla.zip
     dest: "{{ nginx_web_root }}"
     remote_src: true
-    extra_opts: "--strip-components=1"
     owner: "{{ nginx_user }}"
     group: "{{ nginx_user }}"
 
@@ -30,5 +29,10 @@
 
 - name: Clean up temporary files
   ansible.builtin.file:
-    path: /tmp/joomla.tar.gz
+    path: /tmp/joomla.zip
     state: absent
+
+- name: Reload nginx after all
+  ansible.builtin.service:
+    name: nginx
+    state: reloaded
