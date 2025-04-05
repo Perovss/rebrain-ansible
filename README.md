@@ -26,17 +26,17 @@
 
 2. Настройте инвентарь:
 
-   - Отредактируйте `inventory.yml` с данными вашего сервера
+   - Отредактируйте `inventory.yaml` с данными вашего сервера
    - Убедитесь, что ваш SSH-ключ настроен для аутентификации
 
 3. Настройте переменные:
 
-   - Отредактируйте `group_vars/all/vars.yml` для базовой конфигурации
+   - Отредактируйте `group_vars/all/vars.yaml` для базовой конфигурации
 
    - Для чувствительных данных отредактируйте vault-файл:
 
      ```
-     ansible-vault edit group_vars/all/vault.yml
+     ansible-vault edit group_vars/all/vault.yaml
      ```
 
      Установите эти переменные:
@@ -53,7 +53,7 @@
 Запустите плейбук:
 
 ```
-ansible-playbook playbook.yml --ask-vault-pass
+ansible-playbook playbook.yaml --ask-vault-pass
 ```
 
 Вам будет предложено ввести vault-пароль, который вы установили при шифровании vault-файла.
@@ -73,7 +73,6 @@ ansible-playbook playbook.yml --ask-vault-pass
      - Пароль: [используйте пароль пользователя MySQL из vault]
      - Имя базы данных: joomla_db
      - Префикс таблиц: jml_ (или оставьте по умолчанию)
-3. Удалите папку installation, когда будет предложено
 
 ## Детали конфигурации
 
@@ -91,7 +90,7 @@ ansible-playbook playbook.yml --ask-vault-pass
 
 Плейбук по умолчанию устанавливает Joomla {{ joomla_version }}. Для изменения:
 
-1. Отредактируйте `roles/group_vars/all/main.yml`
+1. Отредактируйте `roles/group_vars/all/main.yaml`
 2. Обновите номер версии
 3. Перезапустите плейбук
 
