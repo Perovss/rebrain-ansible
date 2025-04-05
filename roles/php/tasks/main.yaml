@@ -19,8 +19,15 @@
     state: present
     update_cache: true
 
-- name: Ensure PHP-FPM is running and enabled
+- name: Ensure PHP-FPM is running
   ansible.builtin.service:
-    name: "php{{ php_version }}-fpm"
-    state: started
+    name: php{{ php_version }}-fpm
+    state: restarted
     enabled: true
+
+- name: Configure PHP settings
+  ansible.builtin.template:
+    src: php-config.j2
+    dest: /etc/php/{{ php_version }}/fpm/conf.d/99-custom.ini
+    mode: "0644"
+  notify: Restart PHP-FPM

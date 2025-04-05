@@ -1,4 +1,8 @@
-# <img src="joomla.png" alt="joomla" width=140/>Ansible LEMP Stack с Joomla CMS
+---
+typora-root-url: ./
+---
+
+# <img src="joomla.png" alt="joomla" width=80/>Ansible LEMP Stack с Joomla CMS
 
 Этот Ansible проект автоматизирует развертывание LEMP-стека (Linux, Nginx, MySQL, PHP) с CMS Joomla на серверах Ubuntu.
 
@@ -40,11 +44,7 @@
      vault_mysql_user_password: "ваш_пароль_пользователя_mysql"
      ```
 
-4. Установите необходимые роли Ansible:
-
-   ```
-   ansible-galaxy install -r requirements.yml
-   ```
+   
 
 ## Развертывание
 
@@ -69,7 +69,7 @@ ansible-playbook playbook.yml --ask-vault-pass
      - Имя хоста: localhost
      - Имя пользователя: admin (или ваш настроенный пользователь MySQL)
      - Пароль: [используйте пароль пользователя MySQL из vault]
-     - Имя базы данных: joomla
+     - Имя базы данных: joomla_db
      - Префикс таблиц: jml_ (или оставьте по умолчанию)
 3. Удалите папку installation, когда будет предложено
 
@@ -83,13 +83,13 @@ ansible-playbook playbook.yml --ask-vault-pass
 - MySQL:
   - Пароль root: Установлен в vault
   - Пользователь приложения: admin (пароль установлен в vault)
-  - Имя базы данных: joomla
+  - Имя базы данных: joomla_db
 
 ### Версия Joomla
 
 Плейбук по умолчанию устанавливает Joomla {{ joomla_version }}. Для изменения:
 
-1. Отредактируйте `roles/joomla/vars/main.yml`
+1. Отредактируйте `roles/group_vars/all/main.yml`
 2. Обновите номер версии
 3. Перезапустите плейбук
 
@@ -102,45 +102,16 @@ ansible-playbook playbook.yml --ask-vault-pass
    - Настройте регулярное резервное копирование
 2. Зашифрованные vault-пароли защищены только настолько, насколько надежен ваш vault-пароль. Регулярно меняйте пароли.
 
-## Обслуживание
+## Проверка ansible-lint
 
-### Обновление Joomla
+![](ansible_lint.png)
 
-1. Сделайте резервную копию сайта и базы данных
-2. Скачайте последний пакет Joomla
-3. Следуйте официальной процедуре обновления Joomla
+После исправления ошибок
 
-### Обновление плейбука
+![Проверка создания сайта](ansible_lint_finish.png)
 
-Для изменения конфигурации:
 
-1. Обновите переменные соответствующих ролей
-2. Протестируйте изменения в тестовой среде
-3. Перезапустите плейбук с `--tags` для конкретных компонентов при необходимости
 
-## Устранение неполадок
+## Проверка создания сайта
 
-Частые проблемы:
-
-1. **Страница установки отображается после настройки**:
-
-   ```
-   rm -rf /var/www/sites/joomla/installation
-   ```
-
-2. **Проблемы с правами доступа**:
-
-   ```
-   chown -R www-data:www-data /var/www/sites/joomla
-   find /var/www/sites/joomla -type d -exec chmod 755 {} \;
-   find /var/www/sites/joomla -type f -exec chmod 644 {} \;
-   ```
-
-3. **Ошибки Nginx/PHP-FPM**:
-   Проверьте логи:
-
-   ```
-   journalctl -u nginx -u php8.1-fpm --no-pager -n 50
-   ```
-
-   
+![](finish.png)
