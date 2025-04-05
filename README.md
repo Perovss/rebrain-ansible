@@ -1,6 +1,6 @@
-<div style="text-align: center;">
+<h2 align="center">
 <img src="joomla.png" alt="joomla" width=80/>
-</div>
+</h2>
 
 <h2 align="center">Ansible LEMP Stack с Joomla CMS</h2>
 
