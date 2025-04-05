@@ -6,8 +6,6 @@
 
 Этот Ansible проект автоматизирует развертывание LEMP-стека (Linux, Nginx, MySQL, PHP) с CMS Joomla на серверах Ubuntu.
 
-[TOC]
-
 ## Требования
 
 - Ansible 2.9+
