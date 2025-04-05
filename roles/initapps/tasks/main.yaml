@@ -1,0 +1,20 @@
+---
+- name: Install required system packages
+  ansible.builtin.apt:
+    name:
+      - curl
+      - wget
+      - unzip
+      - git
+      - software-properties-common
+    state: present
+    update_cache: true
+
+- name: Ensure web directory has correct permissions
+  ansible.builtin.file:
+    path: "{{ nginx_web_root }}"
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: '0755'
+    recurse: true
+    state: directory

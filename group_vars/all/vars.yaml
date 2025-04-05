@@ -1,0 +1,19 @@
+# Nginx
+nginx_conf_file: /etc/nginx/sites-available/joomla.conf
+nginx_symlink: /etc/nginx/sites-enabled/joomla.conf
+nginx_web_root: /var/www/sites/joomla
+nginx_user: www-data
+
+# PHP
+php_version: "8.1"
+
+# MySQL
+mysql_root_password: "{{ vault_mysql_root_password }}"
+mysql_user: admin
+mysql_user_password: "{{ vault_mysql_user_password }}"
+mysql_user_privileges: "*.*:ALL"
+
+# Joomla
+joomla_version: "5.1.4"
+joomla_download_url: "https://downloads.joomla.org/cms/joomla5/{{ joomla_version }}/Joomla_{{ joomla_version }}-Stable-Full_Package.tar.gz"
+joomla_install_dir: "{{ nginx_web_root }}"

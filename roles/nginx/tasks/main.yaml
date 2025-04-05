@@ -1,0 +1,36 @@
+---
+- name: Install Nginx
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: true
+
+- name: Ensure web root directory exists
+  ansible.builtin.file:
+    path: "{{ nginx_web_root }}"
+    state: directory
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: '0755'
+
+- name: Configure Nginx for Joomla
+  ansible.builtin.template:
+    src: joomla.conf.j2
+    dest: "{{ nginx_conf_file }}"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart nginx
+
+- name: Enable Joomla site
+  ansible.builtin.file:
+    src: "{{ nginx_conf_file }}"
+    dest: "{{ nginx_symlink }}"
+    state: link
+  notify: Restart nginx
+
+- name: Ensure Nginx is running and enabled
+  ansible.builtin.service:
+    name: nginx
+    state: started
+    enabled: true

@@ -1,0 +1,29 @@
+---
+- name: Download Joomla
+  ansible.builtin.get_url:
+    url: "{{ joomla_download_url }}"
+    dest: /tmp/joomla.tar.gz
+    mode: '0644'
+
+- name: Extract Joomla to web directory
+  ansible.builtin.unarchive:
+    src: /tmp/joomla.tar.gz
+    dest: "{{ nginx_web_root }}"
+    remote_src: true
+    extra_opts: "--strip-components=1"
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+
+- name: Set correct permissions for Joomla
+  ansible.builtin.file:
+    path: "{{ nginx_web_root }}"
+    state: directory
+    recurse: true
+    owner: "{{ nginx_user }}"
+    group: "{{ nginx_user }}"
+    mode: '0755'
+
+- name: Clean up temporary files
+  ansible.builtin.file:
+    path: /tmp/joomla.tar.gz
+    state: absent
