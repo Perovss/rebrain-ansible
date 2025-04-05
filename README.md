@@ -1,6 +1,6 @@
-<img src="joomla.png" alt="joomla" width=80/>
+<img src="joomla.png" align="center" alt="joomla" width=80/>
 
-<p align="center">Ansible LEMP Stack с Joomla CMS</p>
+<h2 align="center">Ansible LEMP Stack с Joomla CMS</h2>
 
 Этот Ansible проект автоматизирует развертывание LEMP-стека (Linux, Nginx, MySQL, PHP) с CMS Joomla на серверах Ubuntu.
 
