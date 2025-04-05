@@ -1,10 +1,10 @@
----
-typora-root-url: ./
----
+<img src="joomla.png" alt="joomla" width=80/>
 
-# <img src="joomla.png" alt="joomla" width=80/>Ansible LEMP Stack с Joomla CMS
+<p align="center">Ansible LEMP Stack с Joomla CMS</p>
 
 Этот Ansible проект автоматизирует развертывание LEMP-стека (Linux, Nginx, MySQL, PHP) с CMS Joomla на серверах Ubuntu.
+
+[TOC]
 
 ## Требования
 
